@@ -1,16 +1,15 @@
 provider "aws" {
-  region                      = var.aws_region
-  access_key                  = "test"
-  secret_key                  = "test"
-  skip_credentials_validation = true
-  skip_metadata_api_check     = true
-  skip_requesting_account_id  = true
+  region = var.aws_region
+
+  skip_credentials_validation = var.local_mode
+  skip_metadata_api_check     = var.local_mode
+  skip_requesting_account_id  = var.local_mode
 
   endpoints {
-    ec2         = "http://localhost:4566"
-    autoscaling = "http://localhost:4566"
-    elbv2       = "http://localhost:4566"
-    iam         = "http://localhost:4566"
-    sts         = "http://localhost:4566"
+    ec2         = var.local_mode ? var.local_endpoint : null
+    autoscaling = var.local_mode ? var.local_endpoint : null
+    elbv2       = var.local_mode ? var.local_endpoint : null
+    iam         = var.local_mode ? var.local_endpoint : null
+    sts         = var.local_mode ? var.local_endpoint : null
   }
 }

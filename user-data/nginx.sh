@@ -1,23 +1,21 @@
 #!/bin/bash
 set -eux
 
-dnf install -y nginx
-
-cat > /usr/share/nginx/html/index.html <<'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Auto-Healing Web Tier</title>
-</head>
-<body>
-  <h1>Auto-Healing Web Tier</h1>
-  <p>NGINX is running.</p>
-</body>
-</html>
-EOF
+dnf install -y docker
 
 if [ -d /run/systemd/system ]; then
-  systemctl enable --now nginx
+  systemctl enable --now docker
 else
-  nginx
+  dockerd > /var/log/dockerd.log 2>&1 &
+  sleep 5
 fi
+
+docker pull ghcr.io/lordvladious98/auto-healing-web-tier:latest
+
+docker rm -f web || true
+
+docker run -d \
+  --name web \
+  --restart unless-stopped \
+  -p 80:80 \
+  ghcr.io/lordvladious98/auto-healing-web-tier:latest

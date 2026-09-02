@@ -15,3 +15,15 @@ variable "environment" {
   type        = string
   default     = "assessment"
 }
+
+variable "local_mode" {
+  description = "Use the local Floci AWS emulator instead of AWS"
+  type        = bool
+  default     = false
+}
+
+variable "local_endpoint" {
+  description = "Endpoint used by the local Floci AWS emulator"
+  type        = string
+  default     = "http://localhost:4566"
+}
