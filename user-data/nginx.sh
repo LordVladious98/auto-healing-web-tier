@@ -16,5 +16,8 @@ cat > /usr/share/nginx/html/index.html <<'EOF'
 </html>
 EOF
 
-systemctl enable nginx
-systemctl start nginx
+if [ -d /run/systemd/system ]; then
+  systemctl enable --now nginx
+else
+  nginx
+fi
